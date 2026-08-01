@@ -16,9 +16,8 @@ The primary MCU is an STM32F103C8Tx, in a cheap Bluepill (150ish INR) board that
 STM32CubeIDE extension and use it for building my projects and generating executable files (.elf files, to be precise). I tried changing the debugger to OpenOCD
 vs GDB and modify config file settings to bypass
 the device ID check for using my clone, but couldn't make it work (appreciate any help on that!). I installed STM32CubeProgrammer and it seemed to detect the ST-Link
-(thank goodness, haha) and I can flash my bluepill from there with the generated .elf files and for debugging used UART messages and read them on Arduino Serial Monitor
-and occasionally blinking leds (works good enough for pwm stuff, loll). But STM32 boards being the powerful ones they are, even this lil bluepill has a maximum 
-clock frequency of 72 MHz. So, I invested a bit more and got myself an USB Logic Analyser (again a clone- 24MHz, 8 channel) and using it with a Logic analyser software - trust me,
+(thank goodness, haha) and I can flash my bluepill from there with the generated .elf files and for debugging used UART transmitted messages and read them on Arduino Serial Monitor
+and occasionally blinking leds (works good enough for pwm stuff, loll). But using UART introduces changes in your code and it's execution that you might not always want. So, I invested a bit more and got myself a USB Logic Analyser (again a clone- 24MHz, 8 channel) and using it with a Logic analyser software - trust me,
 it's a lifesaver!
 
 So, the workflow is:
@@ -26,4 +25,5 @@ So, the workflow is:
 Assign pins and select clock configuration on CubeMX -> Code in VS code -> Build and generate elf files -> Burn using CubeProgrammer -> Use logic analyser for 
 debugging!
 
+I build up on my programs from CubeMX auto-generated code and I think it's a great tool for beginners to start using these MCUs.
 
