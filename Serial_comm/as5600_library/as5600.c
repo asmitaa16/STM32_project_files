@@ -1,4 +1,5 @@
 #include "as5600.h"
+#include <stdint.h>
 
 #define ADDR            (0X36 << 1)
 #define CONF_UPPER_BITS 0x07
@@ -105,7 +106,10 @@ HAL_StatusTypeDef get_angle( as5600 *as5600){
 
 }
 
-void get_angle_in_degrees( as5600 *as5600){
+void get_angle_in_degrees( as5600 *as5600, uint8_t bypass){
+    if (bypass){
+        as5600->angle_in_degrees = (float)as5600->raw_angle * RAW_TO_DEGREES
+    }
     as5600->angle_in_degrees = (float)as5600->angle * RAW_TO_DEGREES;
 }
 

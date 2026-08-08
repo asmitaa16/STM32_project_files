@@ -31,6 +31,6 @@ HAL_StatusTypeDef as5600_config( as5600 *as5600, uint16_t data);
 void magnet_detected( as5600 *as5600);
 HAL_StatusTypeDef get_raw_angle( as5600 *as5600);
 HAL_StatusTypeDef get_angle( as5600 *as5600);
-void get_angle_in_degrees( as5600 *as5600);
+void get_angle_in_degrees( as5600 *as5600, uint8_t bypass);
 
 #endif
