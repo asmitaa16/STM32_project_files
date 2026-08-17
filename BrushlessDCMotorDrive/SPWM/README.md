@@ -16,4 +16,5 @@ These approaches should solve the issue.
 
 Have a look at my setup here-
 
-![My setup](setup.png)
+<img width="400" height="300" alt="My setup" src="https://github.com/user-attachments/assets/01fe9fc8-77bb-40cb-abb4-d3b362f5b850" />
+
