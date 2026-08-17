@@ -4,20 +4,19 @@ Hi! I'm teaching myself low-level stuff with my bluepill and it's my repo of all
 
 ## Topics
 - GPIO (start from blinky here)
-- Interrupts (external and timer)
+- Interrupts (external hardware and timer)
 - Timers (pwm and other cool stuff)
-- Serial Communication stuff (this one's got some cool sensors)
-- Motor control (woahhhh)
+- Serial Communication stuff (I'm adding simple easy to use libraries of some common sensors)
+- Motor control (more advanced level, only start when you're comfortable with all of these above)
 
 ## My setup
 As simple and hobbyist as it could be- and the best thing? Completely affordable :)
 
-The primary MCU is an STM32F103C8Tx, in a cheap Bluepill (150ish INR) board that I program and debug with a ST-Link V2 clone (the blue/red ones). I write my code in VS CODE with
+The primary MCU is an STM32F103C8Tx, in a Bluepill board that I program and debug with a ST-Link V2 clone (the blue/red ones). I write my code in VS CODE with
 STM32CubeIDE extension and use it for building my projects and generating executable files (.elf files, to be precise). I tried changing the debugger to OpenOCD
 vs GDB and modify config file settings to bypass
 the device ID check for using my clone, but couldn't make it work (appreciate any help on that!). I installed STM32CubeProgrammer and it seemed to detect the ST-Link
-(thank goodness, haha) and I can flash my bluepill from there with the generated .elf files and for debugging used UART transmitted messages and read them on Arduino Serial Monitor
-and occasionally blinking leds (works good enough for pwm stuff, loll). But using UART introduces changes in your code and it's execution that you might not always want. So, I invested a bit more and got myself a USB Logic Analyser (again a clone- 24MHz, 8 channel) and using it with a Logic analyser software - trust me,
+(thank goodness, haha) and I can flash my bluepill from there with the generated .elf files and for debugging used UART transmitted messages and read them on Arduino Serial Monitor. But using UART `printf()`-s introduces changes in your code and it's execution times that you might not always want. So, I got myself a USB Logic Analyser (24MHz, 8 channel) and using it with a Logic analyser software - trust me,
 it's a lifesaver!
 
 So, the workflow is:
