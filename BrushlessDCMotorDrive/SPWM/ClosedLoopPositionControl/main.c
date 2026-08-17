@@ -13,10 +13,15 @@
 
 
 #define PI              3.14159265358979323846f
-#define POLE_PAIRS      14
+#define POLE_PAIRS      7
 #define RAW_TO_RADIANS  0.0015339807879f
 #define RAW_TO_DEGREES  0.087890625f
-#define KP              0.1
+#define KP              3e-2f
+#define KI              0
+#define KD              4e-4f
+#define alpha           95e-2f 
+#define beta            6e-1f
+
 
 bldcMotorDriver driver;
 
@@ -49,7 +54,25 @@ static void MX_LPUART1_UART_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_TIM2_Init(void);
 
+float theta = 0;
+uint32_t prev_time = 0;
+uint32_t curr_time = 0;
+float dt;
 
+//mechanical angle - reading rotor position directly from magnetic encoder:
+//gotta be signed integers since motor can rotate in any direction
+//works now!!
+int16_t theta_measured;
+int16_t theta_ref;
+int16_t error;
+int16_t error_prev;
+int16_t error_f;
+int16_t delta_error;
+int16_t del_error_f;
+float corr_p;
+float corr_d;
+
+//HAL_StatusTypeDef status;
 int main(void)
 {
 
@@ -66,25 +89,58 @@ int main(void)
   
   HAL_TIM_Base_Start_IT(&htim2);
 
-  as5600_init(&sensor, &hi2c1);
-  as5600_config(&sensor, 0xEE4);
+  
   driver_init(&driver, TIM1, &htim1, &hi2c1, 
   TIM_CHANNEL_1, TIM_CHANNEL_2, TIM_CHANNEL_3, GPIOA, GPIO_PIN_10);
 
-
+  prev_time = HAL_GetTick();
+  //commanded angle
+  theta_ref = 0;
 
   while (1)
-  { 
-    //updating duty cycles at 2Khz:
-    //i.e. dt = 2ms- this one for open-loop
+  {
+    curr_time = HAL_GetTick();
+    dt = (curr_time-prev_time)/ 1000.0f;
 
+    //simple PD controller- 
+    //loop at 250Hz to try to align to a particular angle - position control:
+    if(dt >= 0.004){
+
+      theta_measured = get_sensor_angle(&driver);
+
+      error = ((float)(theta_ref/RAW_TO_RADIANS) - theta_measured);
+
+      if(error > 2048)
+          error -= 4096;
+      else if(error < -2048)
+          error += 4096;
+        //low-pass filter the error values
+        error_f = alpha * error_f + (1-alpha)*error; 
+
+        delta_error = error_f - error_prev;
+        //low-pass filter for stabilising values
+        del_error_f = beta * del_error_f + (1-beta)* delta_error;
+        corr_p = (KP * error_f) * RAW_TO_RADIANS;
+        corr_d = KD * (del_error_f/dt) * RAW_TO_RADIANS;
+        theta += corr_p + corr_d ;
+
+        //wrap theta values around 2*PI
+        if (theta >= 2*PI){
+          theta -= 2*PI;
+        }
+        if (theta <= -2*PI){
+          theta += 2*PI;
+        }
+      error_prev = error_f;
+      prev_time = curr_time;
+    }
+
+    //keep spinning motor
     spin_motor(&driver, theta);
-    if(flag) theta += 0.01f;
-    flag = 0;
   }
-    
 }
 
+//cubemx generated configurations:
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -170,6 +226,7 @@ static void MX_I2C1_Init(void)
 {
   hi2c1.Instance = I2C1;
   hi2c1.Init.Timing = 0x20E2A7F4;
+  //hi2c1.Init.Timing = 0xA0415B88;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -285,9 +342,6 @@ static void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN TIM1_Init 2 */
-
-  /* USER CODE END TIM1_Init 2 */
   HAL_TIM_MspPostInit(&htim1);
 
 }
@@ -362,21 +416,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-
 }
-
-
 void Error_Handler(void)
 {
   __disable_irq();
   while (1)
-  {
-  }
-  
+  {}
 }
 #ifdef USE_FULL_ASSERT
-
 void assert_failed(uint8_t *file, uint32_t line)
 {}
 #endif /* USE_FULL_ASSERT */

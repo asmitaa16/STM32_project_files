@@ -10,7 +10,7 @@
 
 
 #define PI              3.14159265358979323846f
-#define pole_pairs      14
+#define pole_pairs      7
 #define pwm_resolution  512
 #define mod_index       0.05f
 
@@ -27,9 +27,6 @@ void driver_init(bldcMotorDriver *driver, TIM_TypeDef *pwm_timer, TIM_HandleType
 
     driver->timer = pwm_timer;
     driver-> htim = htim;
-    driver-> in1 = 0;
-    driver-> in2 = 0;
-    driver-> in3 = 0;
     driver-> poles = pole_pairs;
     driver-> theta_electrical = 0;
     driver-> theta_mechanical = 0;

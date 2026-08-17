@@ -12,12 +12,11 @@ typedef struct{
 
     uint8_t poles;
 
-    uint16_t in1, in2, in3;
-
     float theta_electrical;
     float theta_mechanical;
     float theta_offset;
 
+    //pwm channgels- motor driver output
     uint32_t ch_a;
     uint32_t ch_b;
     uint32_t ch_c;
