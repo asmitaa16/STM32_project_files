@@ -16,4 +16,4 @@ These approaches should solve the issue.
 
 Have a look at my setup here-
 
-![My setup](images/setup.png)
+![My setup](setup.png)
