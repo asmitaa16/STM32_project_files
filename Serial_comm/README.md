@@ -17,7 +17,7 @@ Both libraries use:
 - I2C
 - STM32 HAL
 
-## Useful tip - Setting up `printf` debugging:
+## Steps for setting up `printf` debugging:
 It is really helpful to debug your code using some print statements. But it's not really easy to get them show up on the
 serial monitor. You gotta configure UART peripherals and transmit. Most nucleo boards have one of their UART peripherals directly linked with the onboard st-link and it shows up as Virtual COM Port when you connect it. You can communicate to your pc via that, using these steps:
 
