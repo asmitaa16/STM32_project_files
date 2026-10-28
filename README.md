@@ -1,28 +1,15 @@
-# STM32 fun codes
+# STM32 codes
 
-Hi! I'm teaching myself low-level stuff with my bluepill and it's my repo of all the stuff I do, enjoy!
+Hi! I'm teaching myself low-level stuff with my bluepill and it's my repo of all the stuff I've done !
 
 ## Topics
-- GPIO (start from blinky here)
+- GPIO 
 - Interrupts (external hardware and timer)
-- Timers (pwm and other cool stuff)
-- Serial Communication stuff (I'm adding simple easy to use libraries of some common sensors)
-- Motor control (more advanced level, only start when you're comfortable with all of these above)
+- Timers (pwm and servo control)
+- Serial Communication  (Libraries for MPU6050 and AS5600 sensors)
+- BrushlessDC motor drive project
 
 ## My setup
-As simple and hobbyist as it could be- and the best thing? Completely affordable :)
 
-The primary MCU is an STM32F103C8Tx, in a Bluepill board that I program and debug with a ST-Link V2 clone (the blue/red ones). I write my code in VS CODE with
-STM32CubeIDE extension and use it for building my projects and generating executable files (.elf files, to be precise). I tried changing the debugger to OpenOCD
-vs GDB and modify config file settings to bypass
-the device ID check for using my clone, but couldn't make it work (appreciate any help on that!). I installed STM32CubeProgrammer and it seemed to detect the ST-Link
-(thank goodness, haha) and I can flash my bluepill from there with the generated .elf files and for debugging used UART transmitted messages and read them on Arduino Serial Monitor. But using UART `printf()`-s introduces changes in your code and it's execution times that you might not always want. So, I got myself a USB Logic Analyser (24MHz, 8 channel) and using it with a Logic analyser software - trust me,
-it's a lifesaver!
-
-So, the workflow is:
-
-Assign pins and select clock configuration on CubeMX -> Code in VS code -> Build and generate elf files -> Burn using CubeProgrammer -> Use logic analyser for 
-debugging!
-
-I build up on my programs from CubeMX auto-generated code and I think it's a great tool for beginners to start using these MCUs.
-
+The primary MCU is an STM32F103C8Tx, in a Bluepill board that I program and debug with a ST-Link V2. I write my code in VS CODE with
+STM32CubeIDE extension and use it for building my projects and generating executable files (.elf files, to be precise). The projects are built on the CubeMX boilerplate provided after configuring the pins , clock speeds and any other functionalities I wish to include in my project,  such as interrupts, Serial communication etc. 
